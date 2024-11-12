@@ -55,7 +55,7 @@ export default function Home() {
                   placeholder="Name"
                   value={newItem.name}
                   onChange={handleInputChange}
-                  className="border p-2 mr-2"
+                  className="border p-2 mr-2 text-black"
               />
               <input
                   type="text"
@@ -63,14 +63,14 @@ export default function Home() {
                   placeholder="Description"
                   value={newItem.description}
                   onChange={handleInputChange}
-                  className="border p-2 mr-2"
+                  className="border p-2 mr-2 text-black"
               />
               {editingItem ? (
-                  <button onClick={updateItem} className="bg-blue-500 text-white p-2 rounded">
+                  <button onClick={updateItem} className="bg-blue-500 text-black p-2 rounded">
                       Update
                   </button>
               ) : (
-                  <button onClick={addItem} className="bg-green-500 text-white p-2 rounded">
+                  <button onClick={addItem} className="bg-green-500 text-black p-2 rounded">
                       Add
                   </button>
               )}
@@ -86,13 +86,13 @@ export default function Home() {
                       <div>
                           <button
                               onClick={() => editItem(item)}
-                              className="bg-yellow-500 text-white p-1 rounded mr-2"
+                              className="bg-yellow-500 text-black p-1 rounded mr-2"
                           >
                               Edit
                           </button>
                           <button
                               onClick={() => deleteItem(item)}
-                              className="bg-red-500 text-white p-1 rounded"
+                              className="bg-red-500 text-black p-1 rounded"
                           >
                               Delete
                           </button>
