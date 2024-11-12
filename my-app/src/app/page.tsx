@@ -1,4 +1,4 @@
-"use client"; // Add this line
+"use client";
 import { useState } from 'react';
 
 interface Item {
@@ -22,7 +22,7 @@ export default function Home() {
     }
   };
 
-  const editItem = (item: Item) => { // Specify item type
+  const editItem = (item: Item) => {
     setEditingItem(item);
     setNewItem({ name: item.name, description: item.description });
   };
@@ -38,68 +38,81 @@ export default function Home() {
     }
   };
 
-  const deleteItem = (item: Item) => { // Specify item type
+  const deleteItem = (item: Item) => {
     const updatedItems = items.filter((i) => i !== item);
     setItems(updatedItems);
   };
 
   return (
-      <div className="container mx-auto p-8">
-          <h1 className="text-2xl font-bold mb-4">CRUD Example (No Database)</h1>
+    <div className="container mx-auto p-8 flex flex-col items-center"> {/* Center content */}
+      <h1 className="text-2xl font-bold mb-4 text-center">CRUD Example (No Database)</h1>
 
-          {/* Input Form */}
-          <div className="mb-4">
-              <input
-                  type="text"
-                  name="name"
-                  placeholder="Name"
-                  value={newItem.name}
-                  onChange={handleInputChange}
-                  className="border p-2 mr-2 text-black"
-              />
-              <input
-                  type="text"
-                  name="description"
-                  placeholder="Description"
-                  value={newItem.description}
-                  onChange={handleInputChange}
-                  className="border p-2 mr-2 text-black"
-              />
-              {editingItem ? (
-                  <button onClick={updateItem} className="bg-blue-500 text-black p-2 rounded">
-                      Update
-                  </button>
-              ) : (
-                  <button onClick={addItem} className="bg-green-500 text-black p-2 rounded">
-                      Add
-                  </button>
-              )}
-          </div>
+      {/* Input Form */}
+      <div className="mb-4 flex flex-col items-center">
+        <div className="flex flex-col mb-2"> {/*  Wrap inputs in a flex container */}
+          <input
+            type="text"
+            name="name"
+            placeholder="Name"
+            value={newItem.name}
+            onChange={handleInputChange}
+            className="border p-2 mr-2 text-black w-64"
+          />
+          <input
+            type="text"
+            name="description"
+            placeholder="Description"
+            value={newItem.description}
+            onChange={handleInputChange}
+            className="border p-2 mr-2 text-black w-64"
+          />
+        </div>
 
-          {/* Item List */}
-          <ul>
-              {items.map((item, index) => (
-                  <li key={index} className="border p-2 mb-2 flex justify-between">
-                      <div>
-                          <span className="font-bold">{item.name}</span>: {item.description}
-                      </div>
-                      <div>
-                          <button
-                              onClick={() => editItem(item)}
-                              className="bg-yellow-500 text-black p-1 rounded mr-2"
-                          >
-                              Edit
-                          </button>
-                          <button
-                              onClick={() => deleteItem(item)}
-                              className="bg-red-500 text-black p-1 rounded"
-                          >
-                              Delete
-                          </button>
-                      </div>
-                  </li>
-              ))}
-          </ul>
+        {/*  Button */}
+        {editingItem ? (
+          <button
+            onClick={updateItem}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out"
+          >
+            Update
+          </button>
+        ) : (
+          <button
+            onClick={addItem}
+            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out"
+          >
+            Add
+          </button>
+        )}
       </div>
+
+      {/* Item List */}
+      <ul className="w-full">
+        {items.map((item, index) => (
+          <li
+            key={index}
+            className="border p-2 mb-2 flex justify-between w-full"
+          >
+            <div>
+              <span className="font-bold">{item.name}</span>: {item.description}
+            </div>
+            <div>
+              <button
+                onClick={() => editItem(item)}
+                className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out mr-2"
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => deleteItem(item)}
+                className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out"
+              >
+                Delete
+              </button>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
