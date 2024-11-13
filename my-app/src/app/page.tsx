@@ -1,5 +1,7 @@
 "use client";
 import { useState } from 'react';
+import Input from './input'; // Importa o componente Input
+import Button from './add-button'
 
 interface Item {
   name: string;
@@ -44,28 +46,18 @@ export default function Home() {
   };
 
   return (
-    <div className="container mx-auto p-8 flex flex-col items-center"> {/* Center content */}
-      <h1 className="text-2xl font-bold mb-4 text-center">CRUD Example (No Database)</h1>
+    <div className="container mx-auto p-8 flex flex-col items-center">
+      {/* Header */}
+      <header className="bg-gray-800 text-white py-4 mb-8 w-full">
+        <h1 className="text-2xl font-bold text-center">CRUD Example (No Database)</h1>
+      </header>
 
       {/* Input Form */}
       <div className="mb-4 flex flex-col items-center">
-        <div className="flex flex-col mb-2"> {/*  Wrap inputs in a flex container */}
-          <input
-            type="text"
-            name="name"
-            placeholder="Name"
-            value={newItem.name}
-            onChange={handleInputChange}
-            className="border p-2 mr-2 text-black w-64"
-          />
-          <input
-            type="text"
-            name="description"
-            placeholder="Description"
-            value={newItem.description}
-            onChange={handleInputChange}
-            className="border p-2 mr-2 text-black w-64"
-          />
+        <div className="flex flex-col mb-2 space-y-2"> {/*  Wrap inputs in a flex container */}
+          {/* Usar o componente Input para as caixas de texto */}
+          <Input type="text" name="name" placeholder="Name" value={newItem.name} onChange={handleInputChange} />
+          <Input type="text" name="description" placeholder="Description" value={newItem.description} onChange={handleInputChange} />
         </div>
 
         {/*  Button */}
@@ -77,14 +69,12 @@ export default function Home() {
             Update
           </button>
         ) : (
-          <button
-            onClick={addItem}
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out"
-          >
-            Add
-          </button>
+          <Button onClick={addItem}>
+            <span className="text">Add</span>
+          </Button>
         )}
       </div>
+
 
       {/* Item List */}
       <ul className="w-full">
