@@ -1,7 +1,9 @@
+"use client";
+
 import React from 'react';
 import styled from 'styled-components';
 
-const Button = ({ children, onClick }: { children: React.ReactNode; onClick: () => void }) => {
+const Button = ({ onClick }: { children: React.ReactNode; onClick: () => void }) => {
     return (
         <StyledWrapper>
             <button className="animated-button" onClick={onClick}>

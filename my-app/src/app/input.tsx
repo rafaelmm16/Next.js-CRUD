@@ -1,7 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
+interface InputProps {
+  type: string;
+  name: string;
+  placeholder: string;
+  value: string;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
 
-const Input = ({ type, name, placeholder, value, onChange }) => {
+const Input: React.FC<InputProps> = ({ type, name, placeholder, value, onChange }) => {
   return (
     <StyledWrapper>
       <input
@@ -16,6 +23,7 @@ const Input = ({ type, name, placeholder, value, onChange }) => {
     </StyledWrapper>
   );
 };
+
 
 const StyledWrapper = styled.div`
   .input {

@@ -1,7 +1,9 @@
 "use client";
+
 import { useState } from 'react';
 import Input from './input'; // Importa o componente Input
-import Button from './add-button'
+import Button from './add-button';
+import Loading from './loading'; // Importa o componente Loading
 
 interface Item {
   name: string;
@@ -12,16 +14,24 @@ export default function Home() {
   const [items, setItems] = useState<Item[]>([]);
   const [newItem, setNewItem] = useState<Item>({ name: '', description: '' });
   const [editingItem, setEditingItem] = useState<Item | null>(null);
+  const [isLoading, setIsLoading] = useState(false); // Estado para controlar o loading
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewItem({ ...newItem, [e.target.name]: e.target.value });
   };
 
-  const addItem = () => {
+  const addItem = async () => {
+    setIsLoading(true); // Inicia o loading
+
     if (newItem.name && newItem.description) {
+      // Simula um atraso para mostrar o loading
+      await new Promise((resolve) => setTimeout(resolve, 1500)); 
+
       setItems([...items, newItem]);
       setNewItem({ name: '', description: '' });
     }
+
+    setIsLoading(false); // Finaliza o loading
   };
 
   const editItem = (item: Item) => {
@@ -29,8 +39,13 @@ export default function Home() {
     setNewItem({ name: item.name, description: item.description });
   };
 
-  const updateItem = () => {
+  const updateItem = async () => {
+    setIsLoading(true); // Inicia o loading
+
     if (newItem.name && newItem.description) {
+      // Simula um atraso para mostrar o loading
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
       const updatedItems = items.map((item) =>
         item === editingItem ? newItem : item
       );
@@ -38,6 +53,8 @@ export default function Home() {
       setEditingItem(null);
       setNewItem({ name: '', description: '' });
     }
+
+    setIsLoading(false); // Finaliza o loading
   };
 
   const deleteItem = (item: Item) => {
@@ -52,29 +69,32 @@ export default function Home() {
         <h1 className="text-2xl font-bold text-center">CRUD Example (No Database)</h1>
       </header>
 
+      {/* Loader */}
+      {isLoading && <Loading />} 
+
       {/* Input Form */}
-      <div className="mb-4 flex flex-col items-center">
+      <div className="mb-4 flex items-center">
         <div className="flex flex-col mb-2 space-y-2"> {/*  Wrap inputs in a flex container */}
           {/* Usar o componente Input para as caixas de texto */}
           <Input type="text" name="name" placeholder="Name" value={newItem.name} onChange={handleInputChange} />
           <Input type="text" name="description" placeholder="Description" value={newItem.description} onChange={handleInputChange} />
         </div>
-
-        {/*  Button */}
-        {editingItem ? (
-          <button
-            onClick={updateItem}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out"
-          >
-            Update
-          </button>
-        ) : (
-          <Button onClick={addItem}>
-            <span className="text">Add</span>
-          </Button>
-        )}
+        <div className="ml-14"> {/* Adicione um espaço para a direita */}
+          {/*  Button */}
+          {editingItem ? (
+            <button
+              onClick={updateItem}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out"
+            >
+              Update
+            </button>
+          ) : (
+            <Button onClick={addItem}>
+              <span className="text">Add</span>
+            </Button>
+          )}
+        </div>
       </div>
-
 
       {/* Item List */}
       <ul className="w-full">
