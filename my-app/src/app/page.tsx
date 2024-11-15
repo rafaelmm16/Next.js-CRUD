@@ -25,7 +25,7 @@ export default function Home() {
 
     if (newItem.name && newItem.description) {
       // Simula um atraso para mostrar o loading
-      await new Promise((resolve) => setTimeout(resolve, 1500)); 
+      await new Promise((resolve) => setTimeout(resolve, 1000)); 
 
       setItems([...items, newItem]);
       setNewItem({ name: '', description: '' });
