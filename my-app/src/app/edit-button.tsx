@@ -7,10 +7,10 @@ interface EditButtonProps {
 
 const EditButton: React.FC<EditButtonProps> = ({ onClick }) => (
   <StyledWrapper>
-    <button className="Btn" onClick={onClick}> {/* Add onClick here */}
+    <button className="Btn" onClick={onClick}>
       Edit
       <svg className="svg" viewBox="0 0 512 512">
-        {/* ... (SVG path) */}
+      <path d="M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L205.2 179l-33.9 33.9-78.5 78.5 22.6 22.6 11.3 11.3 33.9 33.9L231 410.3l54.7-54.7 22.6-22.6 11.3-11.3 62.1-62.1 33.9-33.9 11.3-11.3zM256 352c-35.3 0-64-28.7-64-64s28.7-64 64-64 64 28.7 64 64-28.7 64-64 64z"/>
       </svg>
     </button>
   </StyledWrapper>
