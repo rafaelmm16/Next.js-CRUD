@@ -6,15 +6,17 @@ import Button from './add-button';
 import Loading from './loading';
 import DeleteButton from './delete-button';
 import EditButton from './edit-button';
+import { v4 as uuidv4 } from 'uuid'; // Import uuid
 
 interface Item {
+  id: string; // Add ID field
   name: string;
   description: string;
 }
 
 export default function Home() {
   const [items, setItems] = useState<Item[]>([]);
-  const [newItem, setNewItem] = useState<Item>({ name: '', description: '' });
+  const [newItem, setNewItem] = useState<Item>({ id: '', name: '', description: '' });
   const [editingItem, setEditingItem] = useState<Item | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -27,8 +29,8 @@ export default function Home() {
 
     if (newItem.name && newItem.description) {
       await new Promise((resolve) => setTimeout(resolve, 500));
-      setItems([...items, newItem]);
-      setNewItem({ name: '', description: '' });
+      setItems([...items, { ...newItem, id: uuidv4() }]); // Generate ID
+      setNewItem({ id: '', name: '', description: '' });
     }
 
     setIsLoading(false);
@@ -36,7 +38,7 @@ export default function Home() {
 
   const editItem = (item: Item) => {
     setEditingItem(item);
-    setNewItem({ name: item.name, description: item.description });
+    setNewItem({ ...item }); // This correctly updates newItem
   };
 
   const updateItem = async () => {
@@ -45,18 +47,18 @@ export default function Home() {
     if (newItem.name && newItem.description) {
       await new Promise((resolve) => setTimeout(resolve, 1500));
       const updatedItems = items.map((item) =>
-        item === editingItem ? newItem : item
+        item.id === editingItem?.id ? newItem : item // Compare IDs
       );
       setItems(updatedItems);
       setEditingItem(null);
-      setNewItem({ name: '', description: '' });
+      setNewItem({ id: '', name: '', description: '' });
     }
 
     setIsLoading(false);
   };
 
   const deleteItem = (item: Item) => {
-    const updatedItems = items.filter((i) => i !== item);
+    const updatedItems = items.filter((i) => i.id !== item.id); // Filter by ID
     setItems(updatedItems);
   };
 
@@ -84,22 +86,19 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Loading abaixo dos inputs */}
-      <div className="mb-4"> {/* Adiciona espaço abaixo dos inputs */}
+      <div className="mb-4">
         {isLoading && <Loading />}
       </div>
 
 
       <ul className="w-full">
-        {items.map((item, index) => (
-          <li key={index} className="border p-2 mb-2 flex justify-between w-full">
+        {items.map((item) => (
+          <li key={item.id} className="border p-2 mb-2 flex justify-between w-full"> {/* Use item.id as key */}
             <div>
               <span className="font-bold">{item.name}</span>: {item.description}
             </div>
-            <div>
-              {/* Use the imported EditButton component */}
+            <div className="flex gap-2">
               <EditButton onClick={() => editItem(item)} />
-
               <DeleteButton onClick={() => deleteItem(item)} />
             </div>
           </li>
