@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Input from './input';
 import Button from './add-button';
 import Loading from './loading';
@@ -20,6 +20,10 @@ export default function Home() {
   const [editingItem, setEditingItem] = useState<Item | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    console.log('Current editing item:', editingItem);
+  }, [editingItem]);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewItem({ ...newItem, [e.target.name]: e.target.value });
   };
@@ -38,7 +42,7 @@ export default function Home() {
 
   const editItem = (item: Item) => {
     setEditingItem(item);
-    setNewItem({ ...item }); // This correctly updates newItem
+    setNewItem({ ...item });
   };
 
   const updateItem = async () => {
@@ -70,8 +74,8 @@ export default function Home() {
 
       <div className="mb-4 flex items-center">
         <div className="flex flex-col mb-2 space-y-2">
-          <Input type="text" name="name" placeholder="Name" value={newItem.name} onChange={handleInputChange} />
-          <Input type="text" name="description" placeholder="Description" value={newItem.description} onChange={handleInputChange} />
+        <Input type="text" name="name" placeholder="Name" value={newItem.name} onChange={handleInputChange} />
+        <Input type="text" name="description" placeholder="Description" value={newItem.description} onChange={handleInputChange} />
         </div>
         <div className="ml-14">
           {editingItem ? (
