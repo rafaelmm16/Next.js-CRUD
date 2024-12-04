@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import Input from './input';
-import Button from './add-button';
-import Loading from './loading';
-import DeleteButton from './delete-button';
-import EditButton from './edit-button';
+import Input from './components/input';
+import Button from './components/add-button';
+import Loading from './components/loading';
+import DeleteButton from './components/delete-button';
+import EditButton from './components/edit-button';
 import { v4 as uuidv4 } from 'uuid'; // Import uuid
 
 interface Item {
