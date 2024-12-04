@@ -6,10 +6,11 @@ import Button from './components/add-button';
 import Loading from './components/loading';
 import DeleteButton from './components/delete-button';
 import EditButton from './components/edit-button';
-import { v4 as uuidv4 } from 'uuid'; // Import uuid
+import { v4 as uuidv4 } from 'uuid';
+import { motion } from 'framer-motion';
 
 interface Item {
-  id: string; // Add ID field
+  id: string;
   name: string;
   description: string;
 }
@@ -68,9 +69,28 @@ export default function Home() {
 
   return (
     <div className="container mx-auto p-8 flex flex-col items-center">
-      <header className="bg-gray-800 text-white py-4 mb-8 w-full">
-        <h1 className="text-2xl font-bold text-center">CRUD Example (No Database)</h1>
-      </header>
+      <motion.header
+        className="bg-gradient-to-r from-purple-500 to-pink-500 text-white py-4 mb-8 w-full rounded-lg shadow-lg relative overflow-hidden"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
+        <div className="absolute top-0 left-0 w-full h-full bg-black opacity-20"></div> {/* Darken background */}
+        <motion.h1
+      className="text-3xl font-bold text-center relative z-10"
+      initial={{ scale: 0.8 }}
+      animate={{ scale: 1 }}
+      transition={{ type: "spring", stiffness: 100, damping: 10 }}
+    >
+      CRUD Example (No Database)
+    </motion.h1>
+    <motion.div
+      className="absolute inset-0 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 rounded-lg blur-lg opacity-20 animate-pulse"
+      style={{ transform: "translate(-5px, -5px)" }} // Slight offset for glow
+      transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+    />
+
+  </motion.header>
 
       <div className="mb-4 flex items-center">
         <div className="flex flex-col mb-2 space-y-2">
