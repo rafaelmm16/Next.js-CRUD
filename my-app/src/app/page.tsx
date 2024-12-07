@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { motion } from 'framer-motion';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Modal from './components/modal';
+import ConfirmationModal from './components/modal';
 import Search from './components/search';
 
 interface Item {
@@ -25,6 +25,7 @@ export default function Home() {
   const [editingItem, setEditingItem] = useState<Item | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [modalType, setModalType] = useState<'edit' | 'delete' | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<Item | null>(null);
 
@@ -57,6 +58,7 @@ export default function Home() {
   const editItem = (item: Item) => {
     setEditingItem(item);
     setNewItem({ ...item });
+    setModalType('edit');
     setShowModal(true);
   };
 
@@ -83,6 +85,7 @@ export default function Home() {
 
   const confirmDelete = (item: Item) => {
     setItemToDelete(item);
+    setModalType('delete');
     setShowModal(true);
   };
 
@@ -91,7 +94,7 @@ export default function Home() {
       const updatedItems = items.filter((i) => i.id !== itemToDelete.id);
       setItems(updatedItems);
       setItemToDelete(null);
-      setShowModal(false);
+      closeModal(); // Close modal after delete
       toast.success('Item deleted!');
     }
   };
@@ -101,6 +104,7 @@ export default function Home() {
     setEditingItem(null);
     setNewItem({ id: '', name: '', description: '' });
     setItemToDelete(null);
+    setModalType(null); // Reset modal type
   };
 
 
@@ -158,12 +162,10 @@ export default function Home() {
         {isLoading && <Loading />}
       </div>
 
-      <input
-        type="text"
-        placeholder="Search items..."
+      <Search
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        className="border p-2 mb-4 w-full"
+        placeholder="Search items..."
       />
 
       <ul className="w-full">
@@ -180,23 +182,15 @@ export default function Home() {
         ))}
       </ul>
 
-      <Modal show={showModal} onClose={closeModal}>
-        {editingItem ? (
-          <>
-            <h2>Edit Item</h2>
-            <Input type="text" name="name" placeholder="Name" value={newItem.name} onChange={handleInputChange} />
-            <Input type="text" name="description" placeholder="Description" value={newItem.description} onChange={handleInputChange} />
-            <button onClick={updateItem} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300">Update</button>
-          </>
-        ) : itemToDelete ? (
-          <>
-            <h2>Delete Item</h2>
-            <p>Are you sure you want to delete this item?</p>
-            <button onClick={deleteItem} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300 mr-2">Delete</button>
-            <button onClick={closeModal} className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300">Cancel</button>
-          </>
-        ) : null}
-      </Modal>
+      {showModal && (
+  <ConfirmationModal
+    onClose={closeModal}
+    onConfirm={modalType === 'delete' ? deleteItem : updateItem}
+    title={modalType === 'delete' ? "Are you sure?" : "Edit Item"}
+    message={modalType === 'delete' ? "Do you really want to delete this item?" : "Edit the item details."}
+    confirmButtonText={modalType === 'delete' ? "Delete" : "Update"}
+  />
+)}
 
       <ToastContainer />
     </div>
