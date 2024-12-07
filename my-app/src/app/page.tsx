@@ -8,6 +8,10 @@ import DeleteButton from './components/delete-button';
 import EditButton from './components/edit-button';
 import { v4 as uuidv4 } from 'uuid';
 import { motion } from 'framer-motion';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Modal from './components/modal';
+import Search from './components/search';
 
 interface Item {
   id: string;
@@ -20,10 +24,9 @@ export default function Home() {
   const [newItem, setNewItem] = useState<Item>({ id: '', name: '', description: '' });
   const [editingItem, setEditingItem] = useState<Item | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    console.log('Current editing item:', editingItem);
-  }, [editingItem]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<Item | null>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewItem({ ...newItem, [e.target.name]: e.target.value });
@@ -32,44 +35,83 @@ export default function Home() {
   const addItem = async () => {
     setIsLoading(true);
 
-    if (newItem.name && newItem.description) {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      setItems([...items, { ...newItem, id: uuidv4() }]); // Generate ID
-      setNewItem({ id: '', name: '', description: '' });
+    if (!newItem.name.trim() || !newItem.description.trim()) {
+      toast.error("Name and description cannot be empty.");
+      setIsLoading(false);
+      return;
     }
 
+    if (/[^a-zA-Z0-9\s]/.test(newItem.name) || /[^a-zA-Z0-9\s]/.test(newItem.description)) {
+      toast.error("Invalid characters in name or description.");
+      setIsLoading(false);
+      return;
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    setItems([...items, { ...newItem, id: uuidv4() }]);
+    setNewItem({ id: '', name: '', description: '' });
     setIsLoading(false);
+    toast.success("Item added!");
   };
 
   const editItem = (item: Item) => {
     setEditingItem(item);
     setNewItem({ ...item });
+    setShowModal(true);
   };
 
   const updateItem = async () => {
-    setIsLoading(true);
-
-    if (newItem.name && newItem.description) {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      const updatedItems = items.map((item) =>
-        item.id === editingItem?.id ? newItem : item // Compare IDs
-      );
-      setItems(updatedItems);
-      setEditingItem(null);
-      setNewItem({ id: '', name: '', description: '' });
+    if (!newItem.name.trim() || !newItem.description.trim()) {
+      toast.error("Name and description cannot be empty.");
+      return;
     }
 
-    setIsLoading(false);
+    if (/[^a-zA-Z0-9\s]/.test(newItem.name) || /[^a-zA-Z0-9\s]/.test(newItem.description)) {
+      toast.error("Invalid characters in name or description.");
+      return;
+    }
+
+    const updatedItems = items.map((item) =>
+      item.id === editingItem?.id ? newItem : item
+    );
+    setItems(updatedItems);
+    setEditingItem(null);
+    setNewItem({ id: '', name: '', description: '' });
+    setShowModal(false);
+    toast.success("Item updated!");
   };
 
-  const deleteItem = (item: Item) => {
-    const updatedItems = items.filter((i) => i.id !== item.id); // Filter by ID
-    setItems(updatedItems);
+  const confirmDelete = (item: Item) => {
+    setItemToDelete(item);
+    setShowModal(true);
   };
+
+  const deleteItem = () => {
+    if (itemToDelete) {
+      const updatedItems = items.filter((i) => i.id !== itemToDelete.id);
+      setItems(updatedItems);
+      setItemToDelete(null);
+      setShowModal(false);
+      toast.success('Item deleted!');
+    }
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setEditingItem(null);
+    setNewItem({ id: '', name: '', description: '' });
+    setItemToDelete(null);
+  };
+
+
+  const filteredItems = items.filter((item) =>
+    item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.description.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="container mx-auto p-8 flex flex-col items-center">
-      <motion.header
+      <motion.header  // Added motion.header
         className="bg-gradient-to-r from-purple-500 to-pink-500 text-white py-4 mb-8 w-full rounded-lg shadow-lg relative overflow-hidden"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -92,12 +134,14 @@ export default function Home() {
 
   </motion.header>
 
+
       <div className="mb-4 flex items-center">
-        <div className="flex flex-col mb-2 space-y-2">
+       <div className="flex flex-col mb-2 space-y-2"> {/* Added flex-col and space-y-2 for better layout */}
         <Input type="text" name="name" placeholder="Name" value={newItem.name} onChange={handleInputChange} />
         <Input type="text" name="description" placeholder="Description" value={newItem.description} onChange={handleInputChange} />
-        </div>
-        <div className="ml-14">
+       </div> {/* Closing div for flex-col */}
+
+        <div className="ml-14"> {/* Added ml-14 for spacing */}
           {editingItem ? (
             <button onClick={updateItem} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300">
               Update
@@ -114,20 +158,47 @@ export default function Home() {
         {isLoading && <Loading />}
       </div>
 
+      <input
+        type="text"
+        placeholder="Search items..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="border p-2 mb-4 w-full"
+      />
 
       <ul className="w-full">
-        {items.map((item) => (
-          <li key={item.id} className="border p-2 mb-2 flex justify-between w-full"> {/* Use item.id as key */}
+        {filteredItems.map((item) => (
+          <li key={item.id} className="border p-2 mb-2 flex justify-between w-full">
             <div>
               <span className="font-bold">{item.name}</span>: {item.description}
             </div>
             <div className="flex gap-2">
               <EditButton onClick={() => editItem(item)} />
-              <DeleteButton onClick={() => deleteItem(item)} />
+              <DeleteButton onClick={() => confirmDelete(item)} />
             </div>
           </li>
         ))}
       </ul>
+
+      <Modal show={showModal} onClose={closeModal}>
+        {editingItem ? (
+          <>
+            <h2>Edit Item</h2>
+            <Input type="text" name="name" placeholder="Name" value={newItem.name} onChange={handleInputChange} />
+            <Input type="text" name="description" placeholder="Description" value={newItem.description} onChange={handleInputChange} />
+            <button onClick={updateItem} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300">Update</button>
+          </>
+        ) : itemToDelete ? (
+          <>
+            <h2>Delete Item</h2>
+            <p>Are you sure you want to delete this item?</p>
+            <button onClick={deleteItem} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300 mr-2">Delete</button>
+            <button onClick={closeModal} className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300">Cancel</button>
+          </>
+        ) : null}
+      </Modal>
+
+      <ToastContainer />
     </div>
   );
 }
