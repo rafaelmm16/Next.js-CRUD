@@ -12,6 +12,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ConfirmationModal from './components/modal';
 import Search from './components/search';
+import Update from './components/update';
 
 interface Item {
   id: string;
@@ -57,12 +58,10 @@ export default function Home() {
 
   const editItem = (item: Item) => {
     setEditingItem(item);
-    setNewItem({ ...item });
-    setModalType('edit');
-    setShowModal(true);
+    setNewItem({ ...item }); // Populate input fields directly
   };
 
-  const updateItem = async () => {
+  const updateItem = () => {
     if (!newItem.name.trim() || !newItem.description.trim()) {
       toast.error("Name and description cannot be empty.");
       return;
@@ -73,13 +72,19 @@ export default function Home() {
       return;
     }
 
+    // Show confirmation modal before updating
+    setModalType('edit');
+    setShowModal(true); 
+  };
+
+  const handleConfirmUpdate = () => { // Function to execute after confirmation
     const updatedItems = items.map((item) =>
       item.id === editingItem?.id ? newItem : item
     );
     setItems(updatedItems);
     setEditingItem(null);
     setNewItem({ id: '', name: '', description: '' });
-    setShowModal(false);
+    closeModal();
     toast.success("Item updated!");
   };
 
@@ -104,7 +109,7 @@ export default function Home() {
     setEditingItem(null);
     setNewItem({ id: '', name: '', description: '' });
     setItemToDelete(null);
-    setModalType(null); // Reset modal type
+    setModalType(null);
   };
 
 
@@ -123,37 +128,33 @@ export default function Home() {
       >
         <div className="absolute top-0 left-0 w-full h-full bg-black opacity-20"></div> {/* Darken background */}
         <motion.h1
-      className="text-3xl font-bold text-center relative z-10"
-      initial={{ scale: 0.8 }}
-      animate={{ scale: 1 }}
-      transition={{ type: "spring", stiffness: 100, damping: 10 }}
-    >
-      CRUD Example (No Database)
-    </motion.h1>
-    <motion.div
-      className="absolute inset-0 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 rounded-lg blur-lg opacity-20 animate-pulse"
-      style={{ transform: "translate(-5px, -5px)" }} // Slight offset for glow
-      transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-    />
+          className="text-3xl font-bold text-center relative z-10"
+          initial={{ scale: 0.8 }}
+          animate={{ scale: 1 }}
+          transition={{ type: "spring", stiffness: 100, damping: 10 }}
+        >
+          CRUD Example (No Database)
+        </motion.h1>
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 rounded-lg blur-lg opacity-20 animate-pulse"
+          style={{ transform: "translate(-5px, -5px)" }} // Slight offset for glow
+          transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+        />
 
-  </motion.header>
+      </motion.header>
 
 
       <div className="mb-4 flex items-center">
-       <div className="flex flex-col mb-2 space-y-2"> {/* Added flex-col and space-y-2 for better layout */}
-        <Input type="text" name="name" placeholder="Name" value={newItem.name} onChange={handleInputChange} />
-        <Input type="text" name="description" placeholder="Description" value={newItem.description} onChange={handleInputChange} />
-       </div> {/* Closing div for flex-col */}
+        <div className="flex flex-col mb-2 space-y-2"> {/* Added flex-col and space-y-2 for better layout */}
+          <Input type="text" name="name" placeholder="Name" value={newItem.name} onChange={handleInputChange} />
+          <Input type="text" name="description" placeholder="Description" value={newItem.description} onChange={handleInputChange} />
+        </div> {/* Closing div for flex-col */}
 
-        <div className="ml-14"> {/* Added ml-14 for spacing */}
+        <div className="ml-14">
           {editingItem ? (
-            <button onClick={updateItem} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300">
-              Update
-            </button>
+            <Update onClick={updateItem} />
           ) : (
-            <Button onClick={addItem}>
-              <span className="text">Add</span>
-            </Button>
+            <Button onClick={addItem}>Add</Button>
           )}
         </div>
       </div>
@@ -183,14 +184,14 @@ export default function Home() {
       </ul>
 
       {showModal && (
-  <ConfirmationModal
-    onClose={closeModal}
-    onConfirm={modalType === 'delete' ? deleteItem : updateItem}
-    title={modalType === 'delete' ? "Are you sure?" : "Edit Item"}
-    message={modalType === 'delete' ? "Do you really want to delete this item?" : "Edit the item details."}
-    confirmButtonText={modalType === 'delete' ? "Delete" : "Update"}
-  />
-)}
+        <ConfirmationModal
+          onClose={closeModal}
+          onConfirm={modalType === 'delete' ? deleteItem : handleConfirmUpdate} // Call appropriate function
+          title={modalType === 'delete' ? "Are you sure?" : "Edit Item"}
+          message={modalType === 'delete' ? "Do you really want to delete this item?" : "Edit the item details."}
+          confirmButtonText={modalType === 'delete' ? "Delete" : "Update"}
+        />
+      )}
 
       <ToastContainer />
     </div>
