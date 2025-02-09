@@ -6,18 +6,16 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --pattern-color-1: #3498db;  /* Define colors for the pattern */
-  --pattern-color-2: #2ecc71;
-  --pattern-line-color: rgba(255, 255, 255, 0.1); /* Color for the grid lines */
+  --gradient-start: #6a11cb; /* Começo do gradiente */
+  --gradient-end: #2575fc;   /* Fim do gradiente */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
-    --pattern-color-1: #2980b9; /* Adjust colors for dark mode if needed */
-    --pattern-color-2: #27ae60;
-    --pattern-line-color: rgba(0, 0, 0, 0.1); /* Darker lines for dark mode */
+    --gradient-start: #1e3c72; /* Ajuste para modo escuro */
+    --gradient-end: #2a5298;
   }
 }
 
@@ -26,28 +24,26 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.pattern-background {  /* New class for applying the pattern */
-  background: linear-gradient(45deg, var(--pattern-color-1), var(--pattern-color-2));
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  position: relative;
-  overflow: hidden; /* Ensure the grid lines don't overflow */
-  width: 100%;
-  margin: 0 auto; /* Center the div */
-  min-height: 100vh; /* Ensure it takes up at least the full viewport height */
+/* Novo fundo com gradiente animado */
+.dynamic-gradient-background {
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+  background-size: 200% 200%; /* Para criar o efeito de movimento */
+  animation: gradientAnimation 6s ease infinite; /* Animação suave */
+  min-height: 100vh; /* O fundo cobre toda a altura da viewport */
+  display: flex; /* Centraliza o conteúdo */
+  justify-content: center;
+  align-items: center;
 }
 
-
-.pattern-background::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: 
-    linear-gradient(90deg, var(--pattern-line-color) 1px, transparent 1px),
-    linear-gradient(var(--pattern-line-color) 1px, transparent 1px);
-  background-size: 20px 20px;
-  pointer-events: none;
+/* Animação do gradiente */
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }

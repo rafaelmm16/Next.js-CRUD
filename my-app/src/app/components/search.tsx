@@ -5,7 +5,7 @@ const StyledWrapper = styled.div`
   .input[type="text"] {
     display: block;
     color: rgb(34, 34, 34);
-    background: linear-gradient(142.99deg, rgba(200, 255, 0, 0.952) 15.53%, rgb(192, 0, 96) 88.19%);
+    background: linear-gradient(142.99deg, rgba(200, 255, 0, 0.767) 15.53%, rgb(0, 78, 52) 88.19%);
     box-shadow: 0px 12px 24px -1px rgba(0, 0, 0, 0.18);
     border-color: transparent; // Use transparent instead of rgba(7, 4, 14, 0)
     border-radius: 50px;

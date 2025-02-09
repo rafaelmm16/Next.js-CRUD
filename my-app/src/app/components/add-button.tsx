@@ -33,7 +33,7 @@ const StyledWrapper = styled.div`
     background-color: 0;
     border-radius: 100px;
     font-weight: 600;
-    color: #1f387e;
+    color: #ffffff;
     box-shadow: 0 0 0 2px #ffffff;
     cursor: pointer;
     overflow: hidden;
@@ -43,7 +43,7 @@ const StyledWrapper = styled.div`
   .animated-button svg {
     position: absolute;
     width: 24px;
-    fill: #1f387e;
+    fill: #ffffff;
     z-index: 9;
     transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
   }
