@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import Layout from './components/layout';
 import Input from './components/input';
 import Button from './components/add-button';
 import Loading from './components/loading';
@@ -117,6 +118,7 @@ export default function Home() {
   );
 
   return (
+    <Layout>
     <div className="dynamic-gradient-background">
       <div className="container mx-auto p-8 flex flex-col items-center">
         <motion.header
@@ -170,5 +172,6 @@ export default function Home() {
         <ToastContainer />
       </div>
     </div>
+    </Layout>
   );
 }
