@@ -2,16 +2,16 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Button = () => {
-  return (
-    <StyledWrapper>
-      <button>
-        About
-      </button>
-      <button>
-        Contact
-      </button>
-    </StyledWrapper>
-  );
+    return (
+        <StyledWrapper>
+            <button>
+                About
+            </button>
+            <button>
+                Contact
+            </button>
+        </StyledWrapper>
+    );
 }
 
 const StyledWrapper = styled.div`
@@ -19,12 +19,12 @@ const StyledWrapper = styled.div`
     position: relative;
     padding: 10px 20px;
     border-radius: 7px;
-    border: 1px solid rgb(61, 106, 255);
+    border: none;
     font-size: 14px;
     text-transform: uppercase;
     font-weight: 600;
     letter-spacing: 2px;
-    background: transparent;
+    background: rgb(61, 106, 255); /* Adiciona um background sólido */
     color: #fff;
     overflow: hidden;
     box-shadow: 0 0 0 0 transparent;
@@ -32,6 +32,7 @@ const StyledWrapper = styled.div`
     -moz-transition: all 0.2s ease-in;
     transition: all 0.2s ease-in;
     margin-right: 10px;
+    font-family: 'Poppins', sans-serif;
   }
 
   button:last-child {
@@ -39,7 +40,7 @@ const StyledWrapper = styled.div`
   }
 
   button:hover {
-    background: rgb(61, 106, 255);
+    background: rgb(0, 142, 236); /* Muda a cor do background ao passar o mouse */
     box-shadow: 0 0 30px 5px rgba(0, 142, 236, 0.815);
     -webkit-transition: all 0.2s ease-out;
     -moz-transition: all 0.2s ease-out;
@@ -91,6 +92,7 @@ const StyledWrapper = styled.div`
     -webkit-transition: box-shadow 0.2s ease-in;
     -moz-transition: box-shadow 0.2s ease-in;
     transition: box-shadow 0.2s ease-in;
-  }`;
+  }
+`;
 
 export default Button;
