@@ -9,7 +9,7 @@ const StyledWrapper = styled.div`
 
   input {
     color: rgb(34, 34, 34);
-    background: linear-gradient(142.99deg, rgba(200, 255, 0, 0.767) 15.53%, rgb(0, 78, 52) 88.19%);
+    background: linear-gradient(142.99deg, rgb(70, 0, 55) 15.53%, rgb(0, 255, 170) 88.19%);
     box-shadow: 0px 12px 24px -1px rgba(0, 0, 0, 0.18);
     border: none;
     border-radius: 50px;
@@ -32,7 +32,7 @@ const StyledWrapper = styled.div`
 
     &:focus {
       width: 280px;
-      background: linear-gradient(142.99deg, rgba(150, 255, 100, 0.9) 15.53%, rgb(0, 78, 52) 88.19%);
+      background: linear-gradient(142.99deg, rgba(159, 100, 255, 0.9) 15.53%, rgb(0, 78, 52) 88.19%);
       box-shadow: inset 0px 2px 4px rgba(0, 0, 0, 0.2), 
                   0px 16px 32px -1px rgba(0, 128, 64, .5);
     }
@@ -55,9 +55,16 @@ const StyledWrapper = styled.div`
       width: auto; // Ajusta automaticamente ao container
     }
     
+    }
 `;
 
-const Search = ({ value, onChange, placeholder }) => {
+interface SearchProps {
+  value: string;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder: string;
+}
+
+const Search: React.FC<SearchProps> = ({ value, onChange, placeholder }) => {
   return (
     <StyledWrapper>
       <input

@@ -8,12 +8,11 @@ import Loading from './components/loading';
 import DeleteButton from './components/delete-button';
 import EditButton from './components/edit-button';
 import { v4 as uuidv4 } from 'uuid';
-import { motion } from 'framer-motion';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ConfirmationModal from './components/modal';
 import Search from './components/search';
-import Update from './components/update';
+import Update from './components/save';
 
 interface Item {
   id: string;
@@ -136,7 +135,7 @@ export default function Home() {
           </div>
         </div>
 
-        <Search value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} placeholder="Search items..." />
+        <Search value={searchTerm} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)} placeholder="Search items..." />
 
         <ul className="w-full">
           {filteredItems.map((item) => (
