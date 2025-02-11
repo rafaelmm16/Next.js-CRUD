@@ -54,7 +54,7 @@ export default function Home() {
     }
 
     await new Promise((resolve) => setTimeout(resolve, 500));
-    setItems([...items, { ...newItem, id: uuidv4() }]);
+    setItems((prevItems) => [...prevItems, { ...newItem, id: uuidv4() }]);
     setNewItem({ id: '', name: '', description: '' });
     setIsLoading(false);
     toast.success("Item added!");
@@ -122,53 +122,53 @@ export default function Home() {
 
   return (
     <div className="pattern-background">
-    <Layout>
-    <div className="dynamic-gradient-background">
-      <div className="container mx-auto p-8 flex flex-col items-center">
+      <Layout>
+        <div className="dynamic-gradient-background">
+          <div className="container mx-auto p-8 flex flex-col items-center">
 
-        <div className="mb-4 flex items-center">
-          <div className="flex flex-col space-y-2">
-            <Input type="text" name="name" placeholder="Name" value={newItem.name} onChange={handleInputChange} />
-            <Input type="text" name="description" placeholder="Description" value={newItem.description} onChange={handleInputChange} />
-          </div>
-          <div className="ml-4">
-            {editingItem ? (
-              <Update onClick={updateItem} />
-            ) : (
-              <Button onClick={addItem}>Add</Button>
+            <div className="mb-4 flex items-center">
+              <div className="flex flex-col space-y-2">
+                <Input type="text" name="name" placeholder="Name" value={newItem.name} onChange={handleInputChange} />
+                <Input type="text" name="description" placeholder="Description" value={newItem.description} onChange={handleInputChange} />
+              </div>
+              <div className="ml-4">
+                {editingItem ? (
+                  <Update onClick={updateItem} />
+                ) : (
+                  <Button onClick={addItem}>Add</Button>
+                )}
+              </div>
+            </div>
+
+            <Search value={searchTerm} onChange={handleSearch} placeholder="Search items..." />
+
+            <ul className="w-full">
+              {filteredItems.map((item) => (
+                <li key={item.id} className="border p-2 mb-2 flex justify-between">
+                  <span>{item.name}: {item.description}</span>
+                  <div className="flex gap-2">
+                    <EditButton onClick={() => editItem(item)} />
+                    <DeleteButton onClick={() => confirmDelete(item)} />
+                  </div>
+                </li>
+              ))}
+            </ul>
+
+            {showModal && (
+              <ConfirmationModal
+                onClose={closeModal}
+                onConfirm={modalType === 'delete' ? deleteItem : handleConfirmUpdate}
+                title={modalType === 'delete' ? "Are you sure?" : "Edit Item"}
+                message={modalType === 'delete' ? "Do you really want to delete this item?" : "Edit the item details."}
+                confirmButtonText={modalType === 'delete' ? "Delete" : "Update"}
+              />
             )}
+
+            {isLoading && <Loading />}
+            <ToastContainer />
           </div>
         </div>
-
-        <Search value={searchTerm} onChange={handleSearch} placeholder="Search items..." />
-
-        <ul className="w-full">
-          {filteredItems.map((item) => (
-            <li key={item.id} className="border p-2 mb-2 flex justify-between">
-              <span>{item.name}: {item.description}</span>
-              <div className="flex gap-2">
-                <EditButton onClick={() => editItem(item)} />
-                <DeleteButton onClick={() => confirmDelete(item)} />
-              </div>
-            </li>
-          ))}
-        </ul>
-
-        {showModal && (
-          <ConfirmationModal
-            onClose={closeModal}
-            onConfirm={modalType === 'delete' ? deleteItem : handleConfirmUpdate}
-            title={modalType === 'delete' ? "Are you sure?" : "Edit Item"}
-            message={modalType === 'delete' ? "Do you really want to delete this item?" : "Edit the item details."}
-            confirmButtonText={modalType === 'delete' ? "Delete" : "Update"}
-          />
-        )}
-
-        {isLoading && <Loading />}
-        <ToastContainer />
-      </div>
-    </div>
-    </Layout>
+      </Layout>
     </div>
   );
 }
