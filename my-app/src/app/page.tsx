@@ -34,6 +34,10 @@ export default function Home() {
     setNewItem({ ...newItem, [e.target.name]: e.target.value });
   };
 
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+
   const addItem = async () => {
     setIsLoading(true);
 
@@ -136,7 +140,7 @@ export default function Home() {
           </div>
         </div>
 
-        <Search value={searchTerm} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)} placeholder="Search items..." />
+        <Search value={searchTerm} onChange={handleSearch} placeholder="Search items..." />
 
         <ul className="w-full">
           {filteredItems.map((item) => (
