@@ -117,6 +117,7 @@ export default function Home() {
   );
 
   return (
+    <div className="pattern-background">
     <Layout>
     <div className="dynamic-gradient-background">
       <div className="container mx-auto p-8 flex flex-col items-center">
@@ -164,5 +165,6 @@ export default function Home() {
       </div>
     </div>
     </Layout>
+    </div>
   );
 }
