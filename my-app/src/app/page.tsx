@@ -144,8 +144,8 @@ export default function Home() {
 
             <ul className="w-full">
               {filteredItems.map((item) => (
-                <li key={item.id} className="border p-2 mb-2 flex justify-between">
-                  <span>{item.name}: {item.description}</span>
+                <li key={item.id} className="border p-2 mb-2 flex justify-between bg-green-100 rounded-lg shadow-md transition-all duration-300 ease-in-out transform hover:scale-105">
+                  <span className="text-gray-800">{item.name}: {item.description}</span>
                   <div className="flex gap-2">
                     <EditButton onClick={() => editItem(item)} />
                     <DeleteButton onClick={() => confirmDelete(item)} />
@@ -165,7 +165,18 @@ export default function Home() {
             )}
 
             {isLoading && <Loading />}
-            <ToastContainer />
+            <ToastContainer
+              position="top-right"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="dark"
+            />
           </div>
         </div>
       </Layout>
