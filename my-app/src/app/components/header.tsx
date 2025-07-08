@@ -4,7 +4,7 @@ import Button from './button';
 
 const Header = () => {
     return (
-        <motion.header className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white py-4 shadow-md"
+        <motion.header className="bg-gradient-to-r from-indigo-500 via-purple-700 to-black text-white py-4 shadow-md"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}>
