@@ -30,11 +30,9 @@ const Button = () => {
 
 const StyledWrapper = styled.div`
   .wrapper {
-    display: inline-flex;
+    display: flex;
     list-style: none;
-    height: 20px;
     width: 100%;
-    padding-top: 40px;
     font-family: "Poppins", sans-serif;
     justify-content: center;
     padding-top: 0;
